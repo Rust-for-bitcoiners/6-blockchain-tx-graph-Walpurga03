@@ -18,3 +18,27 @@ You can take your time for this.
 
 Also learning to test like this is a valuable skill that you will require to build production ready
 bitcoin applications in Rust.
+
+
+#### Deutsch
+
+## Implementierung eines Graphen in Rust
+
+Zuerst implementiere die Datei `graph.rs` und stelle sicher, dass du alle Tests bestehst.
+Schreibe deine eigenen Tests für komplizierte Fälle.
+Versuche, dies bis nächsten Montag ohne Verzögerung abzuschließen.
+
+## Erstellen eines Transaktionsgraphen zur Profilierung
+
+Lade die Blöcke von `[start_height, end_height]` einschließlich herunter. Baue den Graphen
+wie im `build_transaction_graph` Funktion der Datei `profile_transactions.rs` erklärt.
+Schreibe einige Tests mit einem Regtest-Knoten, um sicherzustellen, dass deine Implementierung korrekt funktioniert.
+Verwende das [bitcoind](https://crates.io/crates/bitcoind) crate, um das Bitcoin-Programm programmgesteuert
+im Regtest-Modus zu starten.
+Dieser Test könnte aufwendig sein und erfordert Geduld und viel Nachdenken von deiner Seite.
+Du kannst dir dafür Zeit nehmen.
+
+Das Erlernen solcher Tests ist auch eine wertvolle Fähigkeit, die du benötigst, um produktionsreife
+Bitcoin-Anwendungen in Rust zu entwickeln.
+
+Teile mir bitte mit, welche Tools du für diese Übung verwenden möchtest, damit ich dir weiterhelfen kann.
