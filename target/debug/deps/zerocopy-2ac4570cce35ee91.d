@@ -1,0 +1,10 @@
+/home/linux/projects/rust_for_bitcoiner/6-blockchain-tx-graph-Walpurga03/target/debug/deps/libzerocopy-2ac4570cce35ee91.rmeta: /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/lib.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/byteorder.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/derive_util.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/post_monomorphization_compile_fail_tests.rs
+
+/home/linux/projects/rust_for_bitcoiner/6-blockchain-tx-graph-Walpurga03/target/debug/deps/libzerocopy-2ac4570cce35ee91.rlib: /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/lib.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/byteorder.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/derive_util.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/post_monomorphization_compile_fail_tests.rs
+
+/home/linux/projects/rust_for_bitcoiner/6-blockchain-tx-graph-Walpurga03/target/debug/deps/zerocopy-2ac4570cce35ee91.d: /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/lib.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/byteorder.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/derive_util.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/post_monomorphization_compile_fail_tests.rs
+
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/lib.rs:
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/byteorder.rs:
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/derive_util.rs:
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/zerocopy-0.6.6/src/post_monomorphization_compile_fail_tests.rs:

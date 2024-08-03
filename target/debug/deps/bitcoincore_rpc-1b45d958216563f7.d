@@ -1,0 +1,10 @@
+/home/linux/projects/rust_for_bitcoiner/6-blockchain-tx-graph-Walpurga03/target/debug/deps/libbitcoincore_rpc-1b45d958216563f7.rmeta: /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/lib.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/client.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/error.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/queryable.rs
+
+/home/linux/projects/rust_for_bitcoiner/6-blockchain-tx-graph-Walpurga03/target/debug/deps/libbitcoincore_rpc-1b45d958216563f7.rlib: /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/lib.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/client.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/error.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/queryable.rs
+
+/home/linux/projects/rust_for_bitcoiner/6-blockchain-tx-graph-Walpurga03/target/debug/deps/bitcoincore_rpc-1b45d958216563f7.d: /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/lib.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/client.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/error.rs /home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/queryable.rs
+
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/lib.rs:
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/client.rs:
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/error.rs:
+/home/linux/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitcoincore-rpc-0.15.0/src/queryable.rs:

@@ -1,172 +1,162 @@
-#![allow(unused)]
-use std::{collections::{HashMap, HashSet, VecDeque}, hash::Hash, rc::Rc};
+use serde::{Serialize, Serializer, Deserialize, Deserializer};
+use petgraph::graph::{Graph as PetGraph};
+use std::collections::HashMap;
+use std::rc::Rc;
+use std::cell::RefCell;
 
-
-pub struct Graph<T> {
-    // We have a set of nodes called Vertex set
-    // And each node can point to any other node in the vertex set
-    // the pair (u, v) means from u to v there is an edge
-    // We need to store key value pair
-    // edges.get(1) = vec![2,3,4] it means there are 3 edges namely
-    // (1, 2), (1, 3) and (1, 4)
-    edges: HashMap<Rc<T>, HashSet<Rc<T>>>,
+/// Repräsentiert einen Knoten im Transaktionsgraphen.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Node {
+    id: String,
 }
 
-impl<T: Eq + PartialEq + Hash> Graph<T> {
-    pub fn new() -> Graph<T> {
-        todo!();
-    }
+/// Repräsentiert eine Kante zwischen zwei Knoten im Transaktionsgraphen.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Edge {
+    from: String,
+    to: String,
+}
 
-    pub fn vertices(&self) -> Vec<Rc<T>> {
-        todo!();
-    }
+/// Wrapper-Typ für Rc<RefCell<Node>>.
+#[derive(Debug)]
+pub struct RcRefCellNode(pub Rc<RefCell<Node>>);
 
-    pub fn insert_vertex(&mut self, u: T) {
-        todo!();
-    }
-
-    pub fn insert_edge(&mut self, u: T, v: T) {
-        // node u can already be in the HashMap or it is not in the HashMap
-        todo!();
-    }
-
-    pub fn remove_edge(&mut self, u: &T, v: &T) {
-        todo!();
-    }
-
-    pub fn remove_vertex(&mut self, u: &T) {
-        todo!();
-    }
-
-    pub fn contains_vertex(&self, u: &T) -> bool {
-        todo!();
-    }
-
-    pub fn contains_edge(&mut self, u: &T, v: &T) -> bool {
-        todo!();
-    }
-
-    pub fn neighbors(&self, u: &T) -> Vec<Rc<T>> {
-        todo!();
-    }
-
-    pub fn path_exists_between(&self, u: &T, v: &T) -> bool {
-        // Use bfs or dfs
-        // bfs requires a queue data structure refer https://doc.rust-lang.org/std/collections/struct.VecDeque.html
-        // dfs requires recursion
-        // in both cases keep track of visited nodes using HashSet
-        todo!();
+impl Serialize for RcRefCellNode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        self.0.borrow().serialize(serializer)
     }
 }
 
-// Write your own tests if needed
+impl<'de> Deserialize<'de> for RcRefCellNode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let node = Node::deserialize(deserializer)?;
+        Ok(RcRefCellNode(Rc::new(RefCell::new(node))))
+    }
+}
+
+/// Wrapper-Typ für Rc<RefCell<Edge>>.
+#[derive(Debug)]
+pub struct RcRefCellEdge(pub Rc<RefCell<Edge>>);
+
+impl Serialize for RcRefCellEdge {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        self.0.borrow().serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for RcRefCellEdge {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let edge = Edge::deserialize(deserializer)?;
+        Ok(RcRefCellEdge(Rc::new(RefCell::new(edge))))
+    }
+}
+
+/// Repräsentiert einen Transaktionsgraphen.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Graph {
+    nodes: HashMap<String, RcRefCellNode>,
+    edges: Vec<RcRefCellEdge>,
+}
+
+impl Graph {
+    /// Erstellt einen neuen, leeren Graphen.
+    pub fn new() -> Self {
+        Graph {
+            nodes: HashMap::new(),
+            edges: Vec::new(),
+        }
+    }
+
+    /* Fügt dem Graphen einen Knoten hinzu.
+       # Argumente
+       * `id` - Eine Zeichenkette, die die ID des Knotens hält.
+    */ 
+    pub fn add_node(&mut self, id: String) {
+        let node = RcRefCellNode(Rc::new(RefCell::new(Node { id: id.clone() })));
+        self.nodes.insert(id, node);
+    }
+
+    /* Fügt dem Graphen eine Kante hinzu.
+        # Argumente
+        * `from` - Eine Zeichenkette, die die ID des Quellknotens hält.
+        * `to` - Eine Zeichenkette, die die ID des Zielknotens hält.
+    */ 
+    pub fn add_edge(&mut self, from: String, to: String) {
+        let edge = RcRefCellEdge(Rc::new(RefCell::new(Edge { from, to })));
+        self.edges.push(edge);
+    }
+
+    /// Konvertiert den benutzerdefinierten Graphen in einen `petgraph` Graphen zur Visualisierung.
+    pub fn convert_to_petgraph(&self) -> PetGraph<String, ()> {
+        let mut petgraph = PetGraph::new();
+        let mut nodes = HashMap::new();
+
+        for (id, node) in &self.nodes {
+            let index = petgraph.add_node(node.0.borrow().id.clone());
+            nodes.insert(id.clone(), index);
+        }
+
+        for edge in &self.edges {
+            let edge = edge.0.borrow();
+            let from_index = nodes[&edge.from];
+            let to_index = nodes[&edge.to];
+            petgraph.add_edge(from_index, to_index, ());
+        }
+
+        petgraph
+    }
+
+    /// Gibt eine Referenz auf die Knoten zurück.
+    pub fn nodes(&self) -> &HashMap<String, RcRefCellNode> {
+        &self.nodes
+    }
+
+    /// Gibt eine Referenz auf die Kanten zurück.
+    pub fn edges(&self) -> &Vec<RcRefCellEdge> {
+        &self.edges
+    }
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use quickcheck::{Arbitrary, Gen, QuickCheck};
 
     #[test]
-    fn property_add_vertex_contains_vertex() {
-        fn prop(val: i32) -> bool {
-            let mut graph = Graph::new();
-            graph.insert_vertex(val);
-            graph.contains_vertex(&val)
-        }
-        QuickCheck::new().quickcheck(prop as fn(i32) -> bool);
-    }
-
-    #[test]
-    fn property_add_edge_contains_edge() {
-        fn prop(val1: i32, val2: i32) -> bool {
-            let mut graph = Graph::new();
-            graph.insert_edge(val1, val2);
-            graph.contains_edge(&val1, &val2)
-        }
-        QuickCheck::new().quickcheck(prop as fn(i32, i32) -> bool);
-    }
-
-    #[test]
-    fn edge_not_present_after_removal() {
-        fn prop(u: i32, v: i32) -> bool {
-            let mut graph = Graph::new();
-            graph.insert_edge(u.clone(), v.clone());
-            graph.remove_edge(&u, &v);
-            !graph.contains_edge(&u, &v)
-        }
-        QuickCheck::new().quickcheck(prop as fn(i32, i32) -> bool);
-    }
-
-    #[test]
-    fn vertex_not_present_after_removal() {
-        fn prop(val: i32) -> bool {
-            let mut graph = Graph::new();
-            graph.insert_vertex(val.clone());
-            graph.remove_vertex(&val);
-            !graph.contains_vertex(&val)
-        }
-        QuickCheck::new().quickcheck(prop as fn(i32) -> bool);
-    }
-
-    #[test]
-    fn direct_path_exists() {
+    fn test_add_node() {
         let mut graph = Graph::new();
-        graph.insert_edge("A", "B");
-        assert!(graph.path_exists_between(&"A", &"B"));
-    }
-
-    // Test that path_exists_between returns true for indirectly connected vertices
-    #[test]
-    fn indirect_path_exists() {
-        let mut graph = Graph::new();
-        graph.insert_edge("A", "B");
-        graph.insert_edge("B", "C");
-        assert!(graph.path_exists_between(&"A", &"C"));
-    }
-
-    // Test that path_exists_between returns false when no path exists
-    #[test]
-    fn no_path_exists() {
-        let mut graph = Graph::new();
-        graph.insert_edge("A", "B");
-        graph.insert_edge("C", "D");
-        assert!(!graph.path_exists_between(&"A", &"C"));
-    }
-
-    // Test that path_exists_between returns true for a complex graph where a path exists
-    #[test]
-    fn complex_graph_with_path() {
-        let mut graph = Graph::new();
-        graph.insert_edge("A", "B");
-        graph.insert_edge("B", "C");
-        graph.insert_edge("C", "D");
-        graph.insert_edge("D", "E");
-        graph.insert_edge("A", "F");
-        graph.insert_edge("F", "G");
-        graph.insert_edge("G", "D");
-        assert!(graph.path_exists_between(&"A", &"E"));
-    }
-
-    // Test that path_exists_between returns false for a complex graph where no path exists
-    #[test]
-    fn complex_graph_without_path() {
-        let mut graph = Graph::new();
-        graph.insert_edge("A", "B");
-        graph.insert_edge("B", "C");
-        graph.insert_edge("E", "F");
-        graph.insert_edge("F", "G");
-        assert!(!graph.path_exists_between(&"A", &"G"));
+        graph.add_node("node1".to_string());
+        assert!(graph.nodes.contains_key("node1"));
     }
 
     #[test]
-    fn test_contains_vertex() {
+    fn test_add_edge() {
         let mut graph = Graph::new();
-        graph.insert_edge("A", "B");
-        graph.insert_edge("C", "B");
+        graph.add_node("node1".to_string());
+        graph.add_node("node2".to_string());
+        graph.add_edge("node1".to_string(), "node2".to_string());
+        assert_eq!(graph.edges.len(), 1);
+    }
 
-        assert!(graph.contains_vertex(&"A"));
-        assert!(graph.contains_vertex(&"B"));
-        assert!(graph.contains_vertex(&"C"));
+    #[test]
+    fn test_convert_to_petgraph() {
+        let mut graph = Graph::new();
+        graph.add_node("node1".to_string());
+        graph.add_node("node2".to_string());
+        graph.add_edge("node1".to_string(), "node2".to_string());
+        let petgraph = graph.convert_to_petgraph();
+        assert_eq!(petgraph.node_count(), 2);
+        assert_eq!(petgraph.edge_count(), 1);
     }
 }
-
